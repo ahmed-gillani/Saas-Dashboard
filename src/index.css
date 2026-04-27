@@ -1,1 +1,37 @@
 @import "tailwindcss";
+
+/* === Clean Thin Scrollbar === */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Firefox Support */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #4b5563 transparent;
+}
+
+/* Hide scrollbar completely but keep scrolling (if you prefer this) */
+/* 
+::-webkit-scrollbar {
+  display: none;
+}
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+*/

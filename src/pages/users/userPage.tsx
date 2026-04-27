@@ -3,7 +3,7 @@
 //   Search, Plus, Pencil, Trash2, ChevronLeft,
 //   ChevronRight, UserX, RefreshCw,
 // } from 'lucide-react'
-// import { useUserFilters } from '../../hooks/useUsers'
+// import { useUserFilters, useUsers } from '../../hooks/useUsers'
 // import type { User } from '../../types/auth.types'
 // import UserModal from './components/UserModal'
 // import DeleteConfirmModal from './components/DeleteConfirmModal'
@@ -13,23 +13,14 @@
 //   'bg-violet-600', 'bg-emerald-600', 'bg-amber-600',
 //   'bg-red-600', 'bg-blue-600', 'bg-pink-600',
 // ]
+
 // function getColor(name: string) {
 //   let h = 0
-//   for (let i = 0; i < name.length; i++) h = name.charCodeAt(i) + ((h << 5) - h)
+//   for (let i = 0; i < name.length; i++) {
+//     h = name.charCodeAt(i) + ((h << 5) - h)
+//   }
 //   return COLORS[Math.abs(h) % COLORS.length]
 // }
-
-// // ── Mock data (API ready — replace queryFn with real usersApi.getAll) ─────────
-// const MOCK_USERS: User[] = [
-//   { id: '1', name: 'Sara Ahmed', email: 'sara@nexus.io', role: 'admin', status: 'active', createdAt: '2024-01-10T00:00:00Z', lastLogin: new Date(Date.now() - 5 * 60000).toISOString() },
-//   { id: '2', name: 'Mohsin Khan', email: 'mohsin@nexus.io', role: 'user', status: 'active', createdAt: '2024-02-15T00:00:00Z', lastLogin: new Date(Date.now() - 2 * 3600000).toISOString() },
-//   { id: '3', name: 'Fatima Raza', email: 'fatima@nexus.io', role: 'user', status: 'inactive', createdAt: '2024-03-01T00:00:00Z', lastLogin: new Date(Date.now() - 7 * 86400000).toISOString() },
-//   { id: '4', name: 'Asad Qureshi', email: 'asad@nexus.io', role: 'admin', status: 'active', createdAt: '2024-03-20T00:00:00Z', lastLogin: new Date(Date.now() - 1 * 3600000).toISOString() },
-//   { id: '5', name: 'Zara Baig', email: 'zara@nexus.io', role: 'user', status: 'active', createdAt: '2024-04-05T00:00:00Z', lastLogin: new Date(Date.now() - 30 * 60000).toISOString() },
-//   { id: '6', name: 'Hamza Ali', email: 'hamza@nexus.io', role: 'user', status: 'inactive', createdAt: '2024-04-18T00:00:00Z', lastLogin: new Date(Date.now() - 14 * 86400000).toISOString() },
-//   { id: '7', name: 'Nida Farooq', email: 'nida@nexus.io', role: 'admin', status: 'active', createdAt: '2024-05-02T00:00:00Z', lastLogin: new Date(Date.now() - 20 * 60000).toISOString() },
-//   { id: '8', name: 'Bilal Siddiqui', email: 'bilal@nexus.io', role: 'user', status: 'active', createdAt: '2024-05-14T00:00:00Z', lastLogin: new Date(Date.now() - 4 * 3600000).toISOString() },
-// ]
 
 // const LIMIT = 6
 
@@ -44,18 +35,41 @@
 // // ── Main Page ─────────────────────────────────────────────────────────────────
 // export default function UsersPage() {
 //   const filters = useUserFilters()
-//   const { page, setPage, search, setSearch, role, setRole, status, setStatus } = filters
+//   const { page, setPage, search, setSearch, role, setRole, status, setStatus, reset } = filters
 
-//   // In real app: pass { page, limit: LIMIT, search, role, status } to useUsers()
-//   // For mock: client-side filter
-//   const allUsers = MOCK_USERS
+//   // Real API call with filters (when backend is ready)
+//   const { data: apiResponse = { users: [], total: 0, totalPages: 1 } } = useUsers({
+//     page,
+//     limit: LIMIT,
+//     search: search || undefined,
+//     role: role === 'all' ? undefined : role,
+//     status: status === 'all' ? undefined : status,
+//   })
+
+//   // Fallback to mock data if API returns empty (for development)
+//   const MOCK_USERS: User[] = [
+//     { id: '1', name: 'Sara Ahmed', email: 'sara@nexus.io', role: 'admin', status: 'active', createdAt: '2024-01-10T00:00:00Z', lastLogin: new Date(Date.now() - 5 * 60000).toISOString() },
+//     { id: '2', name: 'Mohsin Khan', email: 'mohsin@nexus.io', role: 'user', status: 'active', createdAt: '2024-02-15T00:00:00Z', lastLogin: new Date(Date.now() - 2 * 3600000).toISOString() },
+//     { id: '3', name: 'Fatima Raza', email: 'fatima@nexus.io', role: 'user', status: 'inactive', createdAt: '2024-03-01T00:00:00Z', lastLogin: new Date(Date.now() - 7 * 86400000).toISOString() },
+//     { id: '4', name: 'Asad Qureshi', email: 'asad@nexus.io', role: 'admin', status: 'active', createdAt: '2024-03-20T00:00:00Z', lastLogin: new Date(Date.now() - 1 * 3600000).toISOString() },
+//     { id: '5', name: 'Zara Baig', email: 'zara@nexus.io', role: 'user', status: 'active', createdAt: '2024-04-05T00:00:00Z', lastLogin: new Date(Date.now() - 30 * 60000).toISOString() },
+//     { id: '6', name: 'Hamza Ali', email: 'hamza@nexus.io', role: 'user', status: 'inactive', createdAt: '2024-04-18T00:00:00Z', lastLogin: new Date(Date.now() - 14 * 86400000).toISOString() },
+//     { id: '7', name: 'Nida Farooq', email: 'nida@nexus.io', role: 'admin', status: 'active', createdAt: '2024-05-02T00:00:00Z', lastLogin: new Date(Date.now() - 20 * 60000).toISOString() },
+//     { id: '8', name: 'Bilal Siddiqui', email: 'bilal@nexus.io', role: 'user', status: 'active', createdAt: '2024-05-14T00:00:00Z', lastLogin: new Date(Date.now() - 4 * 3600000).toISOString() },
+//   ]
+
+//   const allUsers = apiResponse.users.length > 0 ? apiResponse.users : MOCK_USERS
+
 //   const filtered = allUsers.filter((u) => {
-//     const matchSearch = !search || u.name.toLowerCase().includes(search.toLowerCase()) || u.email.toLowerCase().includes(search.toLowerCase())
+//     const matchSearch = !search || 
+//       u.name.toLowerCase().includes(search.toLowerCase()) || 
+//       u.email.toLowerCase().includes(search.toLowerCase())
 //     const matchRole = role === 'all' || u.role === role
 //     const matchStatus = status === 'all' || u.status === status
 //     return matchSearch && matchRole && matchStatus
 //   })
-//   const totalPages = Math.max(1, Math.ceil(filtered.length / LIMIT))
+
+//   const totalPages = apiResponse.totalPages || Math.max(1, Math.ceil(filtered.length / LIMIT))
 //   const paged = filtered.slice((page - 1) * LIMIT, page * LIMIT)
 
 //   const [addOpen, setAddOpen] = useState(false)
@@ -69,13 +83,14 @@
 //   const handleRole = (v: typeof role) => { setRole(v); setPage(1) }
 //   const handleStatus = (v: typeof status) => { setStatus(v); setPage(1) }
 
+//   // Summary counts (based on current filtered list)
 //   const activeCount = allUsers.filter(u => u.status === 'active').length
 //   const inactiveCount = allUsers.filter(u => u.status === 'inactive').length
 //   const adminCount = allUsers.filter(u => u.role === 'admin').length
 
 //   return (
 //     <div className="space-y-4">
-//       {/* ── Summary Cards ── */}
+//       {/* Summary Cards */}
 //       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
 //         {[
 //           { label: 'Total Users', value: allUsers.length, color: 'text-violet-400', bg: 'bg-violet-500/10' },
@@ -90,7 +105,7 @@
 //         ))}
 //       </div>
 
-//       {/* ── Table Card ── */}
+//       {/* Table Card */}
 //       <div className="bg-gray-900 border border-gray-800 rounded-xl">
 
 //         {/* Toolbar */}
@@ -114,8 +129,7 @@
 //               <button
 //                 key={r}
 //                 onClick={() => handleRole(r)}
-//                 className={`px-3 py-1 rounded-md text-xs capitalize transition-colors ${role === r ? 'bg-violet-600 text-white' : 'text-gray-400 hover:text-white'
-//                   }`}
+//                 className={`px-3 py-1 rounded-md text-xs capitalize transition-colors ${role === r ? 'bg-violet-600 text-white' : 'text-gray-400 hover:text-white'}`}
 //               >
 //                 {r}
 //               </button>
@@ -128,8 +142,7 @@
 //               <button
 //                 key={s}
 //                 onClick={() => handleStatus(s)}
-//                 className={`px-3 py-1 rounded-md text-xs capitalize transition-colors ${status === s ? 'bg-violet-600 text-white' : 'text-gray-400 hover:text-white'
-//                   }`}
+//                 className={`px-3 py-1 rounded-md text-xs capitalize transition-colors ${status === s ? 'bg-violet-600 text-white' : 'text-gray-400 hover:text-white'}`}
 //               >
 //                 {s}
 //               </button>
@@ -139,7 +152,7 @@
 //           {/* Reset */}
 //           {(search || role !== 'all' || status !== 'all') && (
 //             <button
-//               onClick={filters.reset}
+//               onClick={reset}
 //               className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-300 transition-colors"
 //             >
 //               <RefreshCw size={12} />
@@ -180,7 +193,7 @@
 //                       <p className="text-sm">No users found</p>
 //                       {(search || role !== 'all' || status !== 'all') && (
 //                         <button
-//                           onClick={filters.reset}
+//                           onClick={reset}
 //                           className="text-xs text-violet-400 hover:text-violet-300 transition-colors"
 //                         >
 //                           Clear filters
@@ -192,8 +205,6 @@
 //               ) : (
 //                 paged.map((user) => (
 //                   <tr key={user.id} className="hover:bg-gray-800/40 transition-colors group">
-
-//                     {/* User cell */}
 //                     <td className="px-5 py-3">
 //                       <div className="flex items-center gap-3">
 //                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-[10px] font-bold shrink-0 ${getColor(user.name)}`}>
@@ -206,7 +217,6 @@
 //                       </div>
 //                     </td>
 
-//                     {/* Role */}
 //                     <td className="px-4 py-3">
 //                       <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${user.role === 'admin'
 //                         ? 'bg-violet-500/20 text-violet-400'
@@ -216,28 +226,23 @@
 //                       </span>
 //                     </td>
 
-//                     {/* Status */}
 //                     <td className="px-4 py-3">
 //                       <div className="flex items-center gap-1.5">
-//                         <div className={`w-1.5 h-1.5 rounded-full ${user.status === 'active' ? 'bg-emerald-400' : 'bg-gray-600'
-//                           }`} />
+//                         <div className={`w-1.5 h-1.5 rounded-full ${user.status === 'active' ? 'bg-emerald-400' : 'bg-gray-600'}`} />
 //                         <span className={user.status === 'active' ? 'text-emerald-400' : 'text-gray-500'}>
 //                           {user.status}
 //                         </span>
 //                       </div>
 //                     </td>
 
-//                     {/* Joined */}
 //                     <td className="px-4 py-3 text-gray-500 hidden md:table-cell">
 //                       {new Date(user.createdAt).toLocaleDateString('en-PK', { day: 'numeric', month: 'short', year: 'numeric' })}
 //                     </td>
 
-//                     {/* Last Login */}
 //                     <td className="px-4 py-3 text-gray-500 hidden lg:table-cell">
 //                       {user.lastLogin ? timeAgo(user.lastLogin) : '—'}
 //                     </td>
 
-//                     {/* Actions */}
 //                     <td className="px-5 py-3 text-right">
 //                       <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
 //                         <button
@@ -301,13 +306,14 @@
 //         )}
 //       </div>
 
-//       {/* ── Modals ── */}
+//       {/* Modals */}
 //       {addOpen && <UserModal user={null} onClose={() => setAddOpen(false)} />}
 //       {editUser && <UserModal user={editUser} onClose={() => setEditUser(null)} />}
 //       {deleteUser && <DeleteConfirmModal user={deleteUser} onClose={() => setDeleteUser(null)} />}
 //     </div>
 //   )
 // }
+
 import { useState, useCallback } from 'react'
 import {
   Search, Plus, Pencil, Trash2, ChevronLeft,
@@ -358,14 +364,14 @@ export default function UsersPage() {
 
   // Fallback to mock data if API returns empty (for development)
   const MOCK_USERS: User[] = [
-    { id: '1', name: 'Sara Ahmed', email: 'sara@nexus.io', role: 'admin', status: 'active', createdAt: '2024-01-10T00:00:00Z', lastLogin: new Date(Date.now() - 5 * 60000).toISOString() },
-    { id: '2', name: 'Mohsin Khan', email: 'mohsin@nexus.io', role: 'user', status: 'active', createdAt: '2024-02-15T00:00:00Z', lastLogin: new Date(Date.now() - 2 * 3600000).toISOString() },
-    { id: '3', name: 'Fatima Raza', email: 'fatima@nexus.io', role: 'user', status: 'inactive', createdAt: '2024-03-01T00:00:00Z', lastLogin: new Date(Date.now() - 7 * 86400000).toISOString() },
-    { id: '4', name: 'Asad Qureshi', email: 'asad@nexus.io', role: 'admin', status: 'active', createdAt: '2024-03-20T00:00:00Z', lastLogin: new Date(Date.now() - 1 * 3600000).toISOString() },
-    { id: '5', name: 'Zara Baig', email: 'zara@nexus.io', role: 'user', status: 'active', createdAt: '2024-04-05T00:00:00Z', lastLogin: new Date(Date.now() - 30 * 60000).toISOString() },
-    { id: '6', name: 'Hamza Ali', email: 'hamza@nexus.io', role: 'user', status: 'inactive', createdAt: '2024-04-18T00:00:00Z', lastLogin: new Date(Date.now() - 14 * 86400000).toISOString() },
-    { id: '7', name: 'Nida Farooq', email: 'nida@nexus.io', role: 'admin', status: 'active', createdAt: '2024-05-02T00:00:00Z', lastLogin: new Date(Date.now() - 20 * 60000).toISOString() },
-    { id: '8', name: 'Bilal Siddiqui', email: 'bilal@nexus.io', role: 'user', status: 'active', createdAt: '2024-05-14T00:00:00Z', lastLogin: new Date(Date.now() - 4 * 3600000).toISOString() },
+  //   { id: '1', name: 'Sara Ahmed', email: 'sara@nexus.io', role: 'admin', status: 'active', createdAt: '2024-01-10T00:00:00Z', lastLogin: new Date(Date.now() - 5 * 60000).toISOString() },
+  //   { id: '2', name: 'Mohsin Khan', email: 'mohsin@nexus.io', role: 'user', status: 'active', createdAt: '2024-02-15T00:00:00Z', lastLogin: new Date(Date.now() - 2 * 3600000).toISOString() },
+  //   { id: '3', name: 'Fatima Raza', email: 'fatima@nexus.io', role: 'user', status: 'inactive', createdAt: '2024-03-01T00:00:00Z', lastLogin: new Date(Date.now() - 7 * 86400000).toISOString() },
+  //   { id: '4', name: 'Asad Qureshi', email: 'asad@nexus.io', role: 'admin', status: 'active', createdAt: '2024-03-20T00:00:00Z', lastLogin: new Date(Date.now() - 1 * 3600000).toISOString() },
+  //   { id: '5', name: 'Zara Baig', email: 'zara@nexus.io', role: 'user', status: 'active', createdAt: '2024-04-05T00:00:00Z', lastLogin: new Date(Date.now() - 30 * 60000).toISOString() },
+  //   { id: '6', name: 'Hamza Ali', email: 'hamza@nexus.io', role: 'user', status: 'inactive', createdAt: '2024-04-18T00:00:00Z', lastLogin: new Date(Date.now() - 14 * 86400000).toISOString() },
+  //   { id: '7', name: 'Nida Farooq', email: 'nida@nexus.io', role: 'admin', status: 'active', createdAt: '2024-05-02T00:00:00Z', lastLogin: new Date(Date.now() - 20 * 60000).toISOString() },
+  //   { id: '8', name: 'Bilal Siddiqui', email: 'bilal@nexus.io', role: 'user', status: 'active', createdAt: '2024-05-14T00:00:00Z', lastLogin: new Date(Date.now() - 4 * 3600000).toISOString() },
   ]
 
   const allUsers = apiResponse.users.length > 0 ? apiResponse.users : MOCK_USERS
@@ -514,7 +520,10 @@ export default function UsersPage() {
                 </tr>
               ) : (
                 paged.map((user) => (
-                  <tr key={user.id} className="hover:bg-gray-800/40 transition-colors group">
+                  <tr 
+                    key={user.id} 
+                    className="hover:bg-gray-800/60 transition-colors group border-b border-gray-800/30 last:border-none"
+                  >
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-3">
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-[10px] font-bold shrink-0 ${getColor(user.name)}`}>
@@ -553,24 +562,33 @@ export default function UsersPage() {
                       {user.lastLogin ? timeAgo(user.lastLogin) : '—'}
                     </td>
 
+                    {/* ==================== IMPROVED ACTIONS COLUMN ==================== */}
                     <td className="px-5 py-3 text-right">
-                      <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="flex items-center justify-end gap-2">
+                        {/* Edit Button */}
                         <button
                           onClick={() => openEdit(user)}
-                          className="p-1.5 rounded-lg text-gray-500 hover:text-violet-400 hover:bg-violet-500/10 transition-colors"
-                          title="Edit"
+                          className="p-2.5 rounded-xl text-gray-400 hover:text-violet-400 
+                                     hover:bg-violet-500/10 active:bg-violet-500/20 
+                                     transition-all duration-200 hover:scale-105"
+                          title="Edit User"
                         >
-                          <Pencil size={13} />
+                          <Pencil size={16} strokeWidth={2.5} />
                         </button>
+
+                        {/* Delete Button */}
                         <button
                           onClick={() => openDelete(user)}
-                          className="p-1.5 rounded-lg text-gray-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
-                          title="Delete"
+                          className="p-2.5 rounded-xl text-gray-400 hover:text-red-400 
+                                     hover:bg-red-500/10 active:bg-red-500/20 
+                                     transition-all duration-200 hover:scale-105"
+                          title="Delete User"
                         >
-                          <Trash2 size={13} />
+                          <Trash2 size={16} strokeWidth={2.5} />
                         </button>
                       </div>
                     </td>
+                    {/* ==================== END IMPROVED ACTIONS ==================== */}
                   </tr>
                 ))
               )}

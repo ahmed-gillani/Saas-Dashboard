@@ -25,11 +25,28 @@ export default function Message({
   const [copied, setCopied] = useState(false);
   const [displayText, setDisplayText] = useState("");
 
+  // Convert response into bullet points
+  const formatAsBullets = (text: string): string => {
+    if (!text) return "";
+
+    // Split into sentences and clean
+    const sentences = text
+      .replace(/\.\s+/g, '.\n')
+      .split('\n')
+      .map(s => s.trim())
+      .filter(s => s.length > 0);
+
+    // Convert each sentence into bullet
+    return sentences
+      .map(sentence => `- ${sentence}`)
+      .join('\n');
+  };
+
   useEffect(() => {
     if (isLastAssistant && isThinking) {
       setDisplayText("");
     } else {
-      setDisplayText(content);
+      setDisplayText(formatAsBullets(content));
     }
   }, [content, isThinking, isLastAssistant]);
 
@@ -46,6 +63,7 @@ export default function Message({
           ? 'bg-violet-600 text-white' 
           : 'bg-gray-800 text-gray-100'
       }`}>
+        
         {isLastAssistant && isThinking ? (
           <ReactTyped
             strings={[content]}
@@ -55,7 +73,7 @@ export default function Message({
           />
         ) : (
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {content}
+            {displayText}
           </ReactMarkdown>
         )}
 
