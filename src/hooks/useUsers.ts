@@ -8,19 +8,35 @@ import type {
   CreateUserInput, 
   UpdateUserInput 
 } from '../api/usersApi.types';
+import { useAuthStore } from '../store/authStore';
 
 // ── Query Keys ───────────────────────────────────────────────────────────────
+// export const userKeys = {
+//   all: ['users'] as const,
+//   list: (params: GetUsersParams) => ['users', 'list', params] as const,
+// };
+
+// // ── Get Users with filters & pagination ─────────────────────────────────────
+// export function useUsers(params: GetUsersParams = {}) {
+//   return useQuery({
+//     queryKey: userKeys.list(params),
+//     queryFn: () => usersApi.getAll(params),
+//     staleTime: 30 * 1000,           // 30 seconds
+//   });
+// }
 export const userKeys = {
   all: ['users'] as const,
-  list: (params: GetUsersParams) => ['users', 'list', params] as const,
+  list: (params: GetUsersParams, userId?: string) => ['users', 'list', params, userId] as const,
 };
 
-// ── Get Users with filters & pagination ─────────────────────────────────────
 export function useUsers(params: GetUsersParams = {}) {
+  const { user } = useAuthStore();
+
   return useQuery({
-    queryKey: userKeys.list(params),
+    queryKey: userKeys.list(params, user?.id),
     queryFn: () => usersApi.getAll(params),
-    staleTime: 30 * 1000,           // 30 seconds
+    staleTime: 30 * 1000,
+    enabled: !!user,
   });
 }
 
