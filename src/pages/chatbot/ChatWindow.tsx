@@ -308,9 +308,9 @@ export default function ChatWindow({ chatId }: ChatWindowProps) {
             <Send size={22} className="text-white" />
           </button>
         </div>
-        <p className="text-center text-[10px] text-gray-600 mt-3">
+        {/* <p className="text-center text-[10px] text-gray-600 mt-3">
           Press Enter to send • Shift + Enter for new line
-        </p>
+        </p> */}
       </div>
     </div>
   );

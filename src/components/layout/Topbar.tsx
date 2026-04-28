@@ -53,7 +53,8 @@ export default function Topbar({ title }: { title: string }) {
   }
 
   return (
-    <header className="bg-gray-900 border-b border-gray-800 px-5 py-3 flex items-center gap-3 relative z-10">
+    // <header className="bg-gray-900 border-b border-gray-800 px-5 py-3 flex items-center gap-3 relative z-10">
+    <header className="bg-gray-900 border-b border-gray-800 px-5 md:px-5 pl-20 md:pl-5 py-3 flex items-center gap-3 relative z-20">
       <h1 className="text-sm font-semibold text-white flex-1">{title}</h1>
 
       {/* ── Search ── */}

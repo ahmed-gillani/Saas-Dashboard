@@ -25,7 +25,23 @@ export default function Message({
   const [copied, setCopied] = useState(false);
   const [displayText, setDisplayText] = useState("");
 
-  // Convert response into bullet points
+  // // Convert response into bullet points
+  // const formatAsBullets = (text: string): string => {
+  //   if (!text) return "";
+
+  //   // Split into sentences and clean
+  //   const sentences = text
+  //     .replace(/\.\s+/g, '.\n')
+  //     .split('\n')
+  //     .map(s => s.trim())
+  //     .filter(s => s.length > 0);
+
+  //   // Convert each sentence into bullet
+  //   return sentences
+  //     .map(sentence => `- ${sentence}`)
+  //     .join('\n');
+  // };
+    // Convert response into bullet points
   const formatAsBullets = (text: string): string => {
     if (!text) return "";
 
@@ -38,7 +54,17 @@ export default function Message({
 
     // Convert each sentence into bullet
     return sentences
-      .map(sentence => `- ${sentence}`)
+      .map(sentence => {
+        // NEW RULE: Agar ".-" start mein ho to bullet banao
+        if (sentence.startsWith(".-")) {
+          return `- ${sentence.slice(2).trim()}`;
+        }
+        // Agar ". -" (dot space hyphen) ho to bhi bullet
+        if (sentence.startsWith(". -")) {
+          return `- ${sentence.slice(3).trim()}`;
+        }
+        return `- ${sentence}`;
+      })
       .join('\n');
   };
 
