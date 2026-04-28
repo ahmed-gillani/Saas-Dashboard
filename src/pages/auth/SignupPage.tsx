@@ -75,12 +75,12 @@ export default function SignupPage() {
           {/* Name, Email, Role dropdown, Password, Confirm Password - same as before */}
           <div>
             <label className="text-xs text-gray-400 block mb-1">Full Name</label>
-            <input name="name" required className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white" placeholder="Zubair Ahmed" />
+            <input name="name" required className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white" placeholder="Enter Your Name" />
           </div>
 
           <div>
             <label className="text-xs text-gray-400 block mb-1">Email Address</label>
-            <input name="email" type="email" required className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white" placeholder="you@nexus.io" />
+            <input name="email" type="email" required className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white" placeholder="Enter Your Email" />
           </div>
 
           <div>

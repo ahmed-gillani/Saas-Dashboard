@@ -1,4 +1,4 @@
-// // src/App.tsx - Final Stable Version
+// // src/App.tsx
 // import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 // import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 // import { Toaster } from 'react-hot-toast';
@@ -15,7 +15,8 @@
 // import AnalyticsPage from './pages/analytics/AnalyticsPage';
 // import RolesPage from './pages/RolesPage';
 // import SettingsPage from './pages/settings/SettingsPage';
-// import DowryPage from './pages/dowry/DowryPage';   // ← New
+// import DowryPage from './pages/dowry/DowryPage';
+// import ChatbotPage from './pages/chatbot/ChatbotPage';   // ← Chatbot
 
 // import { useAuthStore } from './store/authStore';
 // import { auth } from './lib/firebase';
@@ -88,7 +89,11 @@
 //           <Route path="/analytics" element={<AnalyticsPage />} />
 //           <Route path="/roles" element={<RolesPage />} />
 //           <Route path="/settings" element={<SettingsPage />} />
-//           <Route path="/dowry" element={<DowryPage />} />   {/* ← New Route */}
+//           <Route path="/dowry" element={<DowryPage />} />
+          
+//           {/* Chatbot Routes */}
+//           <Route path="/chatbot" element={<ChatbotPage />} />
+//           <Route path="/chatbot/:id" element={<ChatbotPage />} />
 //         </Route>
 //       </Route>
 
@@ -108,6 +113,7 @@
 //     </QueryClientProvider>
 //   );
 // }
+
 // src/App.tsx
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -126,13 +132,14 @@ import AnalyticsPage from './pages/analytics/AnalyticsPage';
 import RolesPage from './pages/RolesPage';
 import SettingsPage from './pages/settings/SettingsPage';
 import DowryPage from './pages/dowry/DowryPage';
-import ChatbotPage from './pages/chatbot/ChatbotPage';   // ← Chatbot
+import ChatbotPage from './pages/chatbot/ChatbotPage';
 
 import { useAuthStore } from './store/authStore';
 import { auth } from './lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 
-const queryClient = new QueryClient({
+// Make queryClient globally accessible for logout
+export const queryClient = new QueryClient({
   defaultOptions: {
     queries: { retry: 1, staleTime: 5 * 60 * 1000 },
   },
@@ -200,8 +207,6 @@ function AppContent() {
           <Route path="/roles" element={<RolesPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/dowry" element={<DowryPage />} />
-          
-          {/* Chatbot Routes */}
           <Route path="/chatbot" element={<ChatbotPage />} />
           <Route path="/chatbot/:id" element={<ChatbotPage />} />
         </Route>
